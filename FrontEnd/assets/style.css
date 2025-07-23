@@ -1,3 +1,5 @@
+
+
 /* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
    License: none (public domain)
@@ -172,11 +174,27 @@ nav ul {
 nav li {
   padding: 0 10px;
   font-size: 1.2em;
+  cursor: pointer;
 }
+
 
 li:hover {
   color: #b1663c;
 }
+nav li a {
+  font-size: 1.2em;
+  color: black;
+  text-decoration: none;
+  font-family: inherit;
+  display: inline-block;
+  padding: 0 10px;
+  cursor: pointer;
+}
+
+nav li a:hover {
+  color: #b1663c;
+}
+
 #introduction {
   display: flex;
   align-items: center;
@@ -269,7 +287,7 @@ footer nav ul {
   align-items: center;
 }
 
-.bouton-filtre {
+.bouton-css {
   height: 37px;
   border: 1px solid #1d6154;
   padding: 9px 15px;
@@ -285,9 +303,14 @@ footer nav ul {
 
   transition: all 0.5s ease;
 }
+.bouton-css.selected {
+  background-color: #1D6154;
+  color: white;
+}
 
-.bouton-filtre:hover,
-.bouton-filtre.actif {
+
+.bouton-css:hover,
+.bouton-filtre.selected {
   background-color: #1d6154;
   color: white;
 }
@@ -296,7 +319,7 @@ body.page-login {
   font-family: "Work Sans", sans-serif;
   font-size: 14px;
   background-color: #fffcf6;
-  padding: 15px;
+  padding: 0;
 }
 
 main {
@@ -379,7 +402,7 @@ main {
 }
 
 /* ======== MESSAGES D’ERREUR ======== */
-.erreur-message {
+.erreur-login {
   margin-top: 15px;
   text-align: center;
   color: red;
@@ -420,4 +443,304 @@ footer#piedpage-connexion nav ul li {
   font-size: 14px;
   color: #1d6154;
   margin-top: 5cm;
+}
+
+/* ======== modal ======== */
+.title-and-edition {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+#modal-trigger {
+  font-size: 15px;
+  font-family: "Work Sans";
+  text-decoration: none;
+  font-weight: 400;
+  color: black;
+  align-items: center;
+  justify-content: center;
+}
+/* ======== icone ======== */
+.edition-banner i {
+  font-size: 20px;
+}
+
+
+
+#modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;  
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.30);
+    margin: 0; 
+    overflow: hidden; 
+  }
+  
+  #modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 650px;
+    text-align: center;
+    position: relative;
+    max-height: 670px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #modal-content h2{
+    color: black;
+    margin-top: 20px;
+    font-weight: lighter;
+  }
+
+
+  #modal-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+  }
+  
+  #modal-close i {
+    font-size: 1.3em;
+    display: block;
+  }
+
+  .gallery-modal {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(3, auto);
+    grid-row-gap: 20px;
+    grid-column-gap: 10px;
+    margin: 40px 80px 0px 80px;
+    padding-bottom: 30px;
+    border-bottom: solid 2px #d0d0d0;
+  }
+
+  .gallery-modal figure {
+    position: relative;
+    height: 135px;
+}
+  
+  .gallery-modal img {
+    max-width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  #new-photo{
+    font-family: 'Syne';
+    font-weight: 700;
+    color: white;
+    background-color: #1D6154;
+    padding: 10px 25px 10px 25px;
+    width: 230px;
+    text-align: center;
+    border-radius: 60px;
+    border-width: 0px;
+    margin-top: 30px;
+    cursor: pointer;
+  }
+
+  #delete-gallery {
+    color: #e03232; 
+    background-color: transparent; 
+    border: none; 
+    padding: 0; 
+    font-size: inherit; 
+    font-family: inherit; 
+    cursor: pointer; 
+    margin-top: 20px;
+  }
+
+
+.gallery-modal figure i {
+    position: absolute;
+    color: white;
+    top: 3px;
+    right: 3px;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+    padding: 4px;
+    background-color: black;
+    border: none;
+    border-radius: 5px;
+}
+
+/*modal form*/
+
+#modal-photo {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 650px;
+    text-align: center;
+    position: relative;
+    max-height: 660px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #modal-photo h2{
+    color: black;
+    margin-top: 20px;
+    font-weight: lighter;
+  }
+
+  #modal-return {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+  }
+
+  #modal-return i {
+    font-size: 1.3em;
+    display: block;
+  }
+
+  #modal-photo-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+  }
+
+  #modal-photo-close i {
+    font-size: 1.3em;
+    display: block;
+  }
+
+  #modal-photo form{
+    display: flex;
+    flex-direction: column;
+    padding: 30px 100px 30px 100px
+  }
+
+  #form-photo-div{
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #e8f1f6;
+  }
+  #form-photo-div i{
+    font-size: 4.5em;
+  }
+
+  #label-image{
+    padding: 13px 30px 13px 30px;
+    background-color: #cbd6dc;
+    border-radius: 25px;
+    color: #376b89;
+    margin-top: 17px;
+    cursor: pointer;
+  }
+
+  #form-photo-div p {
+    font-size: 0.9em;
+    color: #575859;
+    margin-top: 7px;
+  }
+
+  .modal-photo-input{
+    display: flex;
+    flex-direction: column;
+    margin-top: 25px;
+    align-items: start;
+  }
+
+  #modal-photo-category, #modal-photo-title{
+    width: 100%;
+    height: 37px;
+    box-shadow: 0px 0px 15px rgb(233, 233, 228);
+    border-width: 0px;
+    margin-top: 10px;
+    padding-left: 13px;
+  }
+
+  #barre-grise{
+    padding-bottom: 45px;
+    border-bottom: solid 2px #d0d0d0;
+  }
+
+  #modal-valider{
+    font-family: 'Syne';
+    font-weight: 700;
+    color: white;
+    background-color: #6f717099;
+    padding: 10px 25px 10px 25px;
+    width: 230px;
+    border-width: 0px;
+    text-align: center;
+    border-radius: 60px;
+    margin-top: 30px;
+    cursor: pointer;
+  }
+
+
+
+  .gallery figure {
+  height: 457px;
+  overflow: hidden;
+}
+
+.gallery img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.admin-banner {
+  background-color: black;
+  color: white;
+  position: fixed;
+  top: 0; 
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: "Work Sans";
+  font-size: 16px;
+  font-weight: 400;
+  z-index: 1000; 
+
+
+
+
 }
