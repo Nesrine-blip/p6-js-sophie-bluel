@@ -1,33 +1,46 @@
-const urlBase = "http://localhost:5678/api/";
-const loginApiUrl = urlBase + "users/login";
+// ===================== API URLs =====================
 
-const formulaireConnexion = document.getElementById("formulaire-connexion");
+const baseUrl = "http://localhost:5678/api/";
+const loginUrl = baseUrl + "users/login";
 
-formulaireConnexion.addEventListener("submit", handleSubmit);
+// ===================== DOM ELEMENT =====================
 
-async function handleSubmit(event) {
-  event.preventDefault();
+// Login form
+const loginForm = document.getElementById("formulaire-connexion");
+
+// On form submit
+loginForm.addEventListener("submit", handleLogin);
+
+
+// ===================== HANDLE LOGIN =====================
+
+async function handleLogin(event) {
+  event.preventDefault(); // Prevent page reload
 
   const emailInput = document.getElementById("email");
   const passwordInput = document.getElementById("motdepasse");
 
-  const ancienMessageErreur = document.querySelector(".erreur-login");
-  if (ancienMessageErreur) {
-    ancienMessageErreur.remove();
+  // Remove old error message if it exists
+  const oldErrorMessage = document.querySelector(".erreur-login");
+  if (oldErrorMessage) {
+    oldErrorMessage.remove();
   }
 
+  // Check if fields are empty
   if (!emailInput.value || !passwordInput.value) {
-    afficherMessageErreur("Veuillez remplir tous les champs.");
+    showErrorMessage("Veuillez remplir tous les champs.");
     return;
   }
 
+  // Prepare login data
   const loginData = {
     email: emailInput.value,
     password: passwordInput.value,
   };
 
   try {
-    const response = await fetch(loginApiUrl, {
+    // Send login request
+    const response = await fetch(loginUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -35,23 +48,28 @@ async function handleSubmit(event) {
       body: JSON.stringify(loginData),
     });
 
+    // If login successful
     if (response.status === 200) {
-      const loginResponse = await response.json();
-      localStorage.setItem("authToken", loginResponse.token);
-      window.location.href = "index.html";
+      const responseData = await response.json();
+      localStorage.setItem("authToken", responseData.token);
+      window.location.href = "index.html"; // Redirect to homepage
     } else {
-      afficherMessageErreur("Email ou mot de passe incorrect.");
+      // Wrong email or password
+      showErrorMessage("Email ou mot de passe incorrect.");
     }
   } catch (error) {
     console.error("Erreur lors de la connexion :", error);
-    afficherMessageErreur("Erreur technique. Veuillez réessayer.");
+    showErrorMessage("Erreur technique. Veuillez réessayer.");
   }
-  
 }
 
-function afficherMessageErreur(message) {
-  const messageErreur = document.createElement("p");
-  messageErreur.classList.add("erreur-login");
-  messageErreur.textContent = message;
-  formulaireConnexion.prepend(messageErreur);
+
+// ===================== DISPLAY ERROR MESSAGE =====================
+
+// Show error message on top of form
+function showErrorMessage(message) {
+  const errorMessage = document.createElement("p");
+  errorMessage.classList.add("erreur-login");
+  errorMessage.textContent = message;
+  loginForm.prepend(errorMessage);
 }

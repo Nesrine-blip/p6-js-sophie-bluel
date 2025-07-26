@@ -13,7 +13,7 @@ let allWorks = [];
 // ===== Fetch Data =====
 async function fetchWorks() {
   const response = await fetch(worksUrl);
-  return response.ok ? await response.json() : [];
+  return response.ok ? await response.json() : []
 }
 
 async function fetchCategories() {
@@ -31,6 +31,7 @@ function displayWorks(works) {
     const caption = document.createElement("figcaption");
 
     img.src = work.imageUrl;
+    
     img.alt = work.title;
     caption.innerText = work.title;
 
@@ -38,6 +39,7 @@ function displayWorks(works) {
     figure.appendChild(caption);
     gallerySection.appendChild(figure);
   });
+  
 }
 
 // ===== Display Filters Dynamically =====
@@ -90,7 +92,7 @@ async function init() {
     console.error("Erreur : impossible de charger les projets");
   }
 
-  
+
 }
 
 
@@ -130,7 +132,3 @@ document.addEventListener("DOMContentLoaded", () => {
 
   updateAuthUI(); 
 });
-
-
-
-
