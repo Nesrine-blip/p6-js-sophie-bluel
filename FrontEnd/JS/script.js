@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const adminBanner = document.getElementById("admin-banner"); // nouveau bandeau noir
 
   function updateAuthUI() {
-    const token = localStorage.getItem("authToken");
+    const token = sessionStorage.getItem("authToken");
 
     const isLoggedIn = !!token;
 
@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function handleLogout(e) {
     e.preventDefault();
-    localStorage.removeItem("authToken");
+    sessionStorage.removeItem("authToken");
     updateAuthUI(); 
   }
 

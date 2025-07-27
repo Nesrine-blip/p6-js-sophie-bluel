@@ -51,7 +51,7 @@ async function handleLogin(event) {
     // If login successful
     if (response.status === 200) {
       const responseData = await response.json();
-      localStorage.setItem("authToken", responseData.token);
+      sessionStorage.setItem("authToken", responseData.token);
       window.location.href = "index.html"; // Redirect to homepage
     } else {
       // Wrong email or password

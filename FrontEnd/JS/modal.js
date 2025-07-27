@@ -115,7 +115,7 @@ function loadWorks() {
 
 // Delete project by its ID
 function deleteWorkById(id) {
-  const token = localStorage.getItem("authToken");
+  const token = sessionStorage.getItem("authToken");
 
   if (!confirm("Êtes-vous sûr de vouloir supprimer ce projet ?")) return;
 
@@ -156,7 +156,7 @@ document.getElementById("delete-gallery").addEventListener("click", () => {
 
 // Delete all works one by one
 function deleteAllGallery() {
-  const token = localStorage.getItem("authToken");
+  const token = sessionStorage.getItem("authToken");
 
   document.querySelectorAll('.gallery-modal figure, .gallery figure').forEach(fig => {
     const id = fig.dataset.id;
@@ -186,7 +186,7 @@ function addNewWork(event) {
   const title = titleInput.value;
   const category = categorySelect.value;
   const image = imageInput.files[0];
-  const token = localStorage.getItem("authToken");
+  const token = sessionStorage.getItem("authToken");
 
   if (!title || !category || !image) {
     return alert("Veuillez remplir tous les champs requis.");
