@@ -1,12 +1,10 @@
 // ===================== API BASE =====================
-
 const BASE_API = "http://localhost:5678/api/";
 
 // Return full API URL (base + route)
 function getApiUrl(route) {
   return `${BASE_API}${route}`;
 }
-
 
 // ===================== DOM ELEMENTS =====================
 
@@ -27,14 +25,13 @@ const categorySelect = document.getElementById('modal-photo-category');
 const imageInput = document.getElementById('image');
 const submitButton = document.getElementById('modal-valider');
 
-// --- Image Upload Preview ---
+// --- Upload preview elements ---
 const labelImage = document.getElementById("label-image");
 const pImage = document.querySelector("#form-photo-div > p");
 const iconeImage = document.querySelector("#iModalImage");
 
-// --- Gallery inside Modal ---
+// --- Gallery inside modal ---
 const imagesModalContainer = document.querySelector('.gallery-modal');
-
 
 // ===================== MODAL DISPLAY =====================
 
@@ -50,37 +47,34 @@ function hideModal() {
   modal.style.display = 'none';
 }
 
-// Prevent modal close when clicking inside
+// Prevent closing when clicking inside modal
 [modalContent, modalPhoto].forEach(el =>
   el.addEventListener('click', e => e.stopPropagation())
 );
 
-// Close modal on background or close buttons
+// Close modal when clicking outside or on close buttons
 [modal, modalClose, modalPhotoClose].forEach(el =>
   el.addEventListener('click', hideModal)
 );
 
-
 // ===================== MODAL NAVIGATION =====================
 
-// Go to "Add Photo" view
+// Switch to "Add Photo" view
 newPhotoBtn.addEventListener('click', () => {
   modalContent.style.display = 'none';
   modalPhoto.style.display = 'block';
   resetAddPhotoForm();
 });
 
-// Go back to main modal view
+// Return to main modal view
 returnBtn.addEventListener('click', () => {
   modalContent.style.display = 'flex';
   modalPhoto.style.display = 'none';
 });
 
+// ===================== LOAD WORKS (GALLERY IN MODAL) =====================
 
-// ===================== LOAD WORKS (GALLERY) =====================
-
-// Create one image block in modal
-// ===================== MODIFIÉ : remplacement de innerHTML par createElement =====================
+// Create <figure> for one project
 function createModalFigure(work) {
   const figure = document.createElement('figure');
   figure.dataset.id = work.id;
@@ -95,7 +89,7 @@ function createModalFigure(work) {
   const trashIcon = document.createElement('i');
   trashIcon.classList.add('fa-regular', 'fa-trash-can');
 
-  // Delete one work when clicking trash icon
+  // Delete this project when trash is clicked
   trashIcon.addEventListener('click', e => {
     e.preventDefault();
     deleteWorkById(work.id);
@@ -119,13 +113,11 @@ function loadWorks() {
     .catch(err => console.error("Erreur lors du chargement des projets", err));
 }
 
-
 // ===================== DELETE ONE WORK =====================
 
-// Delete project by its ID
+// Delete a project by ID
 function deleteWorkById(id) {
   const token = sessionStorage.getItem("authToken");
-
   if (!confirm("Êtes-vous sûr de vouloir supprimer ce projet ?")) return;
 
   fetch(getApiUrl(`works/${id}`), {
@@ -138,16 +130,14 @@ function deleteWorkById(id) {
     .then(res => {
       if (!res.ok) throw new Error();
 
-      // Remove from modal view
+      // Remove from modal and homepage
       document.querySelectorAll(`figure[data-id="${id}"]`).forEach(f => f.remove());
-
-      // Refresh homepage gallery
       refreshGallery();
     })
     .catch(() => alert("Échec de la suppression du projet."));
 }
 
-// Refresh the gallery on homepage
+// Refresh homepage gallery
 function refreshGallery() {
   fetchWorks().then(works => {
     allWorks = works;
@@ -155,15 +145,14 @@ function refreshGallery() {
   });
 }
 
-
 // ===================== DELETE ALL WORKS =====================
 
-// Button to delete all images
+// Delete all projects on button click
 document.getElementById("delete-gallery").addEventListener("click", () => {
   if (confirm("Supprimer toute la galerie ?")) deleteAllGallery();
 });
 
-// Delete all works one by one
+// Loop through all and delete one by one
 function deleteAllGallery() {
   const token = sessionStorage.getItem("authToken");
 
@@ -182,13 +171,12 @@ function deleteAllGallery() {
   });
 }
 
-
 // ===================== ADD NEW WORK =====================
 
 // On submit button click
 submitButton.addEventListener("click", addNewWork);
 
-// Add new image project
+// Add new project to modal + homepage
 function addNewWork(event) {
   event.preventDefault();
 
@@ -197,6 +185,7 @@ function addNewWork(event) {
   const image = imageInput.files[0];
   const token = sessionStorage.getItem("authToken");
 
+  // Basic validation
   if (!title || !category || !image) {
     return alert("Veuillez remplir tous les champs requis.");
   }
@@ -205,6 +194,7 @@ function addNewWork(event) {
     return alert("L'image est trop volumineuse. Maximum 4 Mo.");
   }
 
+  // Create form data for image upload
   const formData = new FormData();
   formData.append("title", title);
   formData.append("category", category);
@@ -222,7 +212,7 @@ function addNewWork(event) {
     .then(() => {
       alert("Projet ajouté avec succès !");
 
-      // Show main modal again
+      // Return to main modal
       modalPhoto.style.display = "none";
       modalContent.style.display = "flex";
 
@@ -230,7 +220,7 @@ function addNewWork(event) {
       loadWorks();
       refreshGallery();
 
-      // Reset form and preview
+      // Reset form + preview
       document.getElementById("modal-photo-form").reset();
       document.querySelector("#form-photo-div img")?.remove();
       [labelImage, pImage, imageInput, iconeImage].forEach(el => el.style.display = "");
@@ -238,49 +228,46 @@ function addNewWork(event) {
     .catch(err => console.error("Erreur lors de l'ajout du projet", err));
 }
 
-
 // ===================== IMAGE PREVIEW =====================
 
-// Show preview of selected image
+// Show image preview after selecting a file
 imageInput.addEventListener("change", () => {
   const image = imageInput.files[0];
   const preview = document.createElement("img");
+
   preview.src = URL.createObjectURL(image);
   preview.style.maxHeight = "100%";
   preview.style.width = "auto";
 
-  // Hide default upload elements
+  // Hide upload icons/text
   [labelImage, pImage, imageInput, iconeImage].forEach(el => el.style.display = "none");
 
   document.getElementById("form-photo-div").appendChild(preview);
 });
 
-
 // ===================== BUTTON COLOR ON FORM COMPLETION =====================
 
-// Change button color if form is complete
+// Update button color when form is complete
 function checkFormCompletion() {
-  submitButton.style.backgroundColor = (titleInput.value && categorySelect.value && imageInput.value)
-    ? '#1D6154'
-    : '';
+  submitButton.style.backgroundColor = (
+    titleInput.value && categorySelect.value && imageInput.value
+  ) ? '#1D6154' : '';
 }
 
-// Watch for any input change
+// Listen to form input changes
 [titleInput, categorySelect, imageInput].forEach(el =>
   el.addEventListener('input', checkFormCompletion)
 );
 
+// ===================== LOAD CATEGORIES INTO SELECT =====================
 
-// ===================== LOAD CATEGORIES =====================
-
-// Load all categories into select
 function loadCategories() {
   fetch(getApiUrl("categories"))
     .then(res => res.json())
     .then(categories => {
-      // ===================== replaced innerHTML with createElement =====================
-
+      // Clear existing options
       categorySelect.innerHTML = "";
+
       const defaultOption = document.createElement("option");
       defaultOption.value = "";
       defaultOption.disabled = true;
@@ -288,6 +275,7 @@ function loadCategories() {
       defaultOption.textContent = "Sélectionnez une catégorie";
       categorySelect.appendChild(defaultOption);
 
+      // Add categories to select
       categories.forEach(cat => {
         const option = document.createElement("option");
         option.value = cat.id;
@@ -298,10 +286,8 @@ function loadCategories() {
     .catch(err => console.error("Erreur lors du chargement des catégories", err));
 }
 
-
 // ===================== RESET FORM =====================
 
-// Reset form and image preview
 function resetAddPhotoForm() {
   document.querySelector("form").reset();
 
@@ -309,6 +295,5 @@ function resetAddPhotoForm() {
   if (previewImage) previewImage.remove();
 
   [labelImage, pImage, iconeImage].forEach(el => el.style.display = "");
-
   submitButton.style.backgroundColor = "";
 }

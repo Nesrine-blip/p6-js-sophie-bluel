@@ -10,19 +10,21 @@ const editBanner = document.getElementById("edition-banner");
 
 let allWorks = [];
 
-// ===== Fetch Data =====
+// ===== Fetch works from API =====
 async function fetchWorks() {
   const response = await fetch(worksUrl);
-  return response.ok ? await response.json() : []
+  return response.ok ? await response.json() : [];
 }
 
+// ===== Fetch categories from API =====
 async function fetchCategories() {
   const response = await fetch(categoriesUrl);
   return response.ok ? await response.json() : [];
 }
 
-// ===== Display Works in Gallery =====
+// ===== Display all works in the gallery =====
 function displayWorks(works) {
+  // Clear gallery first
   gallerySection.innerHTML = "";
 
   works.forEach(work => {
@@ -31,7 +33,6 @@ function displayWorks(works) {
     const caption = document.createElement("figcaption");
 
     img.src = work.imageUrl;
-    
     img.alt = work.title;
     caption.innerText = work.title;
 
@@ -39,10 +40,9 @@ function displayWorks(works) {
     figure.appendChild(caption);
     gallerySection.appendChild(figure);
   });
-  
 }
 
-// ===== Display Filters Dynamically =====
+// ===== Create filter buttons =====
 function displayFilters(categories) {
   // "All" button
   const allBtn = document.createElement("button");
@@ -51,7 +51,7 @@ function displayFilters(categories) {
   allBtn.dataset.id = "0";
   filtersContainer.appendChild(allBtn);
 
-  // Category buttons
+  // Buttons for each category
   categories.forEach(category => {
     const button = document.createElement("button");
     button.textContent = category.name;
@@ -61,18 +61,18 @@ function displayFilters(categories) {
   });
 }
 
-// ===== Filter Logic =====
+// ===== Filter logic when a button is clicked =====
 filtersContainer.addEventListener("click", event => {
   if (event.target.tagName === "BUTTON") {
     const selectedId = parseInt(event.target.dataset.id);
 
-    // Update selected button style
+    // Highlight the selected button
     document.querySelectorAll(".bouton-css").forEach(btn => btn.classList.remove("selected"));
     event.target.classList.add("selected");
 
-    // Filter works
+    // Show filtered works
     if (selectedId === 0) {
-      displayWorks(allWorks);
+      displayWorks(allWorks); // Show all
     } else {
       const filtered = allWorks.filter(work => work.categoryId === selectedId);
       displayWorks(filtered);
@@ -80,7 +80,7 @@ filtersContainer.addEventListener("click", event => {
   }
 });
 
-// ===== Startup Function =====
+// ===== Initialization function (runs at startup) =====
 async function init() {
   allWorks = await fetchWorks();
   const categories = await fetchCategories();
@@ -91,44 +91,40 @@ async function init() {
   } else {
     console.error("Erreur : impossible de charger les projets");
   }
-
-
 }
 
-
-
-// ===== Launch Site =====
+// ===== Launch app =====
 init();
 
-
-
-
+// ===== UI updates for login/logout =====
 document.addEventListener("DOMContentLoaded", () => {
   const authBtn = document.getElementById("auth-btn");
   const editBanner = document.getElementById("edition-banner");
-  const adminBanner = document.getElementById("admin-banner"); // nouveau bandeau noir
+  const adminBanner = document.getElementById("admin-banner"); // Black admin banner
 
+  // Update UI depending on login status
   function updateAuthUI() {
     const token = sessionStorage.getItem("authToken");
-
     const isLoggedIn = !!token;
 
-    // Mettre à jour le bouton de connexion/déconnexion
+    // Change button text and behavior
     authBtn.textContent = isLoggedIn ? "Logout" : "Login";
     authBtn.onclick = isLoggedIn
       ? handleLogout
       : () => (window.location.href = "login.html");
 
-    
+    // Show/hide admin elements
     if (editBanner) editBanner.style.display = isLoggedIn ? "flex" : "none";
     if (adminBanner) adminBanner.style.display = isLoggedIn ? "flex" : "none";
   }
 
+  // Handle logout logic
   function handleLogout(e) {
     e.preventDefault();
     sessionStorage.removeItem("authToken");
-    updateAuthUI(); 
+    updateAuthUI();
   }
 
-  updateAuthUI(); 
+  // Initial UI update on page load
+  updateAuthUI();
 });
