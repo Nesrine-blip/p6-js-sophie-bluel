@@ -80,21 +80,30 @@ returnBtn.addEventListener('click', () => {
 // ===================== LOAD WORKS (GALLERY) =====================
 
 // Create one image block in modal
+// ===================== MODIFIÉ : remplacement de innerHTML par createElement =====================
 function createModalFigure(work) {
   const figure = document.createElement('figure');
   figure.dataset.id = work.id;
 
-  figure.innerHTML = `
-    <img src="${work.imageUrl}" alt="${work.title}" />
-    <figcaption>Modifier</figcaption>
-    <i class="fa-regular fa-trash-can"></i>
-  `;
+  const img = document.createElement('img');
+  img.src = work.imageUrl;
+  img.alt = work.title;
+
+  const caption = document.createElement('figcaption');
+  caption.textContent = "Modifier";
+
+  const trashIcon = document.createElement('i');
+  trashIcon.classList.add('fa-regular', 'fa-trash-can');
 
   // Delete one work when clicking trash icon
-  figure.querySelector('i').addEventListener('click', e => {
+  trashIcon.addEventListener('click', e => {
     e.preventDefault();
     deleteWorkById(work.id);
   });
+
+  figure.appendChild(img);
+  figure.appendChild(caption);
+  figure.appendChild(trashIcon);
 
   return figure;
 }
@@ -269,7 +278,16 @@ function loadCategories() {
   fetch(getApiUrl("categories"))
     .then(res => res.json())
     .then(categories => {
-      categorySelect.innerHTML = `<option value="" selected disabled>Sélectionnez une catégorie</option>`;
+      // ===================== replaced innerHTML with createElement =====================
+
+      categorySelect.innerHTML = "";
+      const defaultOption = document.createElement("option");
+      defaultOption.value = "";
+      defaultOption.disabled = true;
+      defaultOption.selected = true;
+      defaultOption.textContent = "Sélectionnez une catégorie";
+      categorySelect.appendChild(defaultOption);
+
       categories.forEach(cat => {
         const option = document.createElement("option");
         option.value = cat.id;
