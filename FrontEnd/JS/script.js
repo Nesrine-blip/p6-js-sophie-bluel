@@ -42,13 +42,13 @@ function displayWorks(works) {
   });
 }
 
-// ===== Create filter buttons =====
+// ===== Create buttons =====
 function displayFilters(categories) {
   // "All" button
   const allBtn = document.createElement("button");
   allBtn.textContent = "Tous";
   allBtn.classList.add("bouton-css", "selected");
-  allBtn.dataset.id = "0";
+  allBtn.dataset.id = "0"; 
   filtersContainer.appendChild(allBtn);
 
   // Buttons for each category

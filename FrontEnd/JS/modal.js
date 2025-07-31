@@ -274,6 +274,7 @@ function loadCategories() {
       defaultOption.selected = true;
       defaultOption.textContent = "Sélectionnez une catégorie";
       categorySelect.appendChild(defaultOption);
+      
 
       // Add categories to select
       categories.forEach(cat => {
@@ -296,4 +297,6 @@ function resetAddPhotoForm() {
 
   [labelImage, pImage, iconeImage].forEach(el => el.style.display = "");
   submitButton.style.backgroundColor = "";
+  categorySelect.value = "";
+
 }
